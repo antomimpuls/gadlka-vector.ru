@@ -170,31 +170,7 @@
       linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
       border-color:rgba(192,132,252,.28);
     }
-    /* --- СТИЛЬ ДЛЯ БЕГУЩЕГО СВЕТА ПО РУНАМ --- */
-    .runes{
-      margin-top:auto;
-      font-size:12px;
-      letter-spacing:2px;
-      color:#e9d7ff;
-      opacity:.8;
-      white-space: nowrap;
-      overflow: hidden;
-      position: relative;
-    }
-    .runes::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(192, 132, 252, 0.8), transparent);
-      animation: shine 2s infinite;
-    }
-    @keyframes shine {
-      0% { left: -100%; }
-      100% { left: 100%; }
-    }
+    .runes{margin-top:auto;font-size:12px;letter-spacing:2px;color:#e9d7ff;opacity:.8}
     /* CTA портал */
     .cta{margin-top:14px;background:linear-gradient(135deg,rgba(192,132,252,.08),rgba(168,85,247,.08));border:1px solid rgba(192,132,252,.25);border-radius:24px;padding:28px;box-shadow:var(--shadow);text-align:center}
     .portal{display: none;} /* Скрыто */
@@ -354,7 +330,7 @@
         transform: none !important;
         perspective: none !important;
       }
-      /* Лицо/оборот — больше не абсолютно позиционируем */
+      /* Лицо/оборот — больше не absolutely positioned */
       .face {
         position: relative !important;
         inset: auto !important;
@@ -514,6 +490,56 @@
       opacity: 1;
       transform: translateY(0);
     }
+    /* 🎈 Облачко-чат рядом с кнопкой WhatsApp */
+    .chat-bubble-wrap{
+      position: relative;
+      display: inline-block;
+      margin-left: 12px;
+      vertical-align: middle;
+    }
+
+    /* само облако */
+    .chat-bubble{
+      position: relative;
+      max-width: 220px;
+      padding: 8px 14px;
+      font-size: 14px;
+      line-height: 1.3;
+      color: #fff;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(192,132,252,.25);
+      border-radius: 18px 18px 18px 4px;
+      backdrop-filter: blur(6px);
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity .4s, transform .4s;
+    }
+
+    /* стрелочка */
+    .chat-bubble::after{
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: -7px;
+      width: 0; height: 0;
+      border: 6px solid transparent;
+      border-right-color: rgba(255,255,255,.12);
+      transform: translateY(-50%);
+    }
+
+    /* печатающий курсор */
+    .typing-cursor{
+      display: inline-block;
+      width: 2px;
+      height: 1em;
+      background: #c084fc;
+      animation: blink 1s infinite;
+    }
+    @keyframes blink{ 50%{ opacity: 0; } }
+
+    /* показать */
+    .chat-bubble.show{ opacity: 1; transform: translateY(0); }
+    
     @media (max-width: 768px) {
       .sticky-whatsapp {
         bottom: 15px;
@@ -699,6 +725,13 @@
           <div class="online-indicator">
             <span class="online-dot"></span>
             <span>Гадалка на связи</span>
+          </div>
+          <!-- 🎈 Облачко-чат рядом с кнопкой WhatsApp -->
+          <div class="chat-bubble-wrap">
+            <div class="chat-bubble" id="typingCloud">
+              <span id="dynamicText"></span>
+              <span class="typing-cursor"></span>
+            </div>
           </div>
         </div>
       </div>
@@ -1250,6 +1283,34 @@
       document.querySelectorAll('.card').forEach(card => {
         observer.observe(card);
       });
+      
+      // --- ДОБАВЛЕНО: ОБЛАЧКО-ЧАТ ---
+      const map = {
+        morning: {h:[6,7,8,9],        txt:'Доброе утро! ☀️'},
+        day:    {h:[10,11,12,13,14,15,16,17], txt:'Кофе-брейк? ☕'},
+        evening:{h:[18,19,20,21,22],  txt:'Добрый вечер 🌙'},
+        night:  {h:[23,0,1,2,3,4,5],  txt:'Бессонница? 🌜'}
+      };
+
+      function showCloud(){
+        const h = new Date().getHours();
+        const set = Object.values(map).find(m=>m.h.includes(h));
+        const text = set ? set.txt : 'Привет! 🌟'; // Дефолтное значение
+
+        const cloud = document.getElementById('typingCloud');
+        const span  = document.getElementById('dynamicText');
+        if (!cloud || !span) return; // Проверка наличия элементов
+        
+        span.textContent = '';
+        cloud.classList.add('show');
+
+        // печать по буквам
+        [...text].forEach((ch,i)=>{
+          setTimeout(()=> span.textContent += ch, i*45);
+        });
+      }
+
+      showCloud();
     });
 
     // === НОВЫЕ ФУНКЦИИ ДЛЯ ЛИПКОЙ КНОПКИ ===
