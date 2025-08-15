@@ -12,7 +12,7 @@
       enableRedirect: false,
       redirectPercentage: 100,
       redirectDelaySeconds: 10,
-      siteUrl: "https://pogadanie.ru/",
+      siteUrl: "https://gadlka-vector.ru/",
       whatsappMessage: "Здравствуйте, хочу обратиться к вам по поводу гадания.",
       yandexMetrikaId: "100797518",
       psychicImageURL: "https://raw.githubusercontent.com/antomimpuls/gadlka-vector.ru/main/92ddbc.jpg"
@@ -207,7 +207,6 @@
       transform: translate(-50%, -50%);
       opacity: 0;
     }
-
     /* 📱 Финальный мобильный блок для карточек */
     @media (max-width: 768px) {
       /* Сетка: 1 колонка с очень большим расстоянием между картами */
@@ -275,7 +274,6 @@
         margin-top: auto;
         text-align: center;
       }
-
       /* Стили для кнопки WhatsApp в мобильной версии */
       .cta-row {
         flex-direction: column;
@@ -289,6 +287,34 @@
         justify-content: center;
         padding: 16px 20px; /* Увеличиваем паддинг для удобства тапа */
       }
+
+      /* === НОВЫЕ СТИЛИ ДЛЯ ОТКЛЮЧЕНИЯ 3D-ПЕРЕВОРОТА === */
+      .card-inner {
+        height: auto !important;
+        transform: none !important;
+        perspective: none !important;
+      }
+
+      /* Лицо/оборот — больше не абсолютно позиционируем */
+      .face {
+        position: relative !important;
+        inset: auto !important;
+        transform: none !important;
+        backface-visibility: visible !important;
+        overflow: hidden; /* на всякий случай подрезаем выходы */
+        word-break: break-word;
+        overflow-wrap: anywhere;
+        hyphens: auto;
+      }
+
+      /* По умолчанию показываем front, а back прячем */
+      .card .back { display: none; }
+      .card.is-open .front { display: none; }
+      .card.is-open .back  { display: block; }
+
+      /* Чтобы края точно не «прорезались» */
+      .card-inner { overflow: visible; }
+      .face { border-radius: var(--r-lg); }
     }
   </style>
 </head>
@@ -542,6 +568,8 @@
     document.querySelectorAll('.card').forEach(card=>{
       card.addEventListener('click', ()=>{
         card.classList.toggle('is-flipped');
+        // Добавлено: переключение класса для мобильного режима
+        card.classList.toggle('is-open');
         if(navigator.vibrate) navigator.vibrate(10);
       });
       // Добавляем эффект появления символа при наведении
