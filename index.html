@@ -79,6 +79,43 @@
     .btn:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent);left:-100%;opacity:0}
     .btn:hover:after{left:100%;opacity:1;transition:left .8s ease,opacity .8s ease}
     .btn:active{transform:scale(.98)}
+    /* --- НОВЫЕ СТИЛИ ДЛЯ АУРЫ ВОКРУГ КНОПКИ --- */
+    .btn::before{
+      content:'';
+      position:absolute;
+      inset:-4px;
+      border-radius:999px;
+      background:radial-gradient(circle, #c084fc 0%, transparent 70%);
+      z-index:-1;
+      animation:aura 2s ease-in-out infinite;
+      pointer-events: none; /* Не мешает клику */
+    }
+    @keyframes aura{
+      0%,100%{opacity:.4;transform:scale(.9);}
+      50%{opacity:1;transform:scale(1.05);}
+    }
+    /* --- НОВЫЕ СТИЛИ ДЛЯ "ОНЛАЙН" ИНДИКАТОРА --- */
+    .online-indicator {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 14px;
+        color: #cbd5e1;
+        margin-top: 10px;
+        justify-content: center;
+    }
+    .online-dot{
+      display:inline-block;
+      width:8px;height:8px;
+      border-radius:50%;
+      background:#c084fc;
+      box-shadow:0 0 8px #c084fc;
+      animation:pulse 1.5s infinite;
+    }
+    @keyframes pulse{
+      50%{transform:scale(1.5);opacity:.5;}
+    }
+    /* --- КОНЕЦ НОВЫХ СТИЛЕЙ --- */
     .hero-visual{position:relative;display:grid;place-items:center}
     .ball-wrap{position:relative;width:min(60vw,480px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;animation: float 6s ease-in-out infinite}
     canvas#ball{position:absolute;inset:0;width:100%;height:100%;border-radius:50%;box-shadow:0 30px 80px rgba(138,92,246,.35), inset 0 0 40px rgba(192,132,252,.2)}
@@ -287,14 +324,12 @@
         justify-content: center;
         padding: 16px 20px; /* Увеличиваем паддинг для удобства тапа */
       }
-
       /* === НОВЫЕ СТИЛИ ДЛЯ ОТКЛЮЧЕНИЯ 3D-ПЕРЕВОРОТА === */
       .card-inner {
         height: auto !important;
         transform: none !important;
         perspective: none !important;
       }
-
       /* Лицо/оборот — больше не абсолютно позиционируем */
       .face {
         position: relative !important;
@@ -306,12 +341,10 @@
         overflow-wrap: anywhere;
         hyphens: auto;
       }
-
       /* По умолчанию показываем front, а back прячем */
       .card .back { display: none; }
       .card.is-open .front { display: none; }
       .card.is-open .back  { display: block; }
-
       /* Чтобы края точно не «прорезались» */
       .card-inner { overflow: visible; }
       .face { border-radius: var(--r-lg); }
@@ -327,6 +360,11 @@
         <div class="cta-row">
           <!-- Удалён элемент .portal -->
           <a href="#" id="waBtn" class="btn" aria-label="Написать в WhatsApp"><span>🔮</span> Написать в WhatsApp</a>
+          <!-- Добавлен индикатор онлайн -->
+          <div class="online-indicator">
+            <span class="online-dot"></span>
+            <span>Гадалка на связи</span>
+          </div>
         </div>
       </div>
       <div class="hero-visual">
@@ -475,6 +513,11 @@
           <h3 class="section-title" style="margin-bottom:10px">Готова помочь вам прямо сейчас</h3>
           <p class="section-sub">Не откладывайте решение своих проблем. Напишите мне в WhatsApp, и мы вместе найдём выход из ситуации. Первая консультация включает анализ и рекомендации.</p>
           <a href="#" id="waBtn2" class="btn" aria-label="Связаться в WhatsApp"><span>🌀</span> Написать в WhatsApp</a>
+           <!-- Добавлен индикатор онлайн для второй кнопки -->
+          <div class="online-indicator">
+            <span class="online-dot"></span>
+            <span>Гадалка на связи</span>
+          </div>
         </div>
       </div>
     </section>
