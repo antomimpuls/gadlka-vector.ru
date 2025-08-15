@@ -1,3 +1,4 @@
+```html
 <html lang="ru">
 <head>
   <meta charset="utf-8">
@@ -88,7 +89,6 @@
       radial-gradient(circle at 50% 50%, rgba(168,85,247,.28), transparent 80%);
       filter:blur(0.2px);border:1px solid rgba(192,132,252,.25);
     }
-
     /* ПРОБЛЕМЫ — “карты” с flip */
     section{padding:72px 0;position:relative}
     .section-title{font-weight:800;font-size:clamp(24px,4vw,38px);margin-bottom:8px;background:linear-gradient(90deg,var(--p1),var(--p2));-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -108,7 +108,6 @@
       border-color:rgba(192,132,252,.28);
     }
     .runes{margin-top:auto;font-size:12px;letter-spacing:2px;color:#e9d7ff;opacity:.8}
-
     /* CTA портал */
     .cta{margin-top:14px;background:linear-gradient(135deg,rgba(192,132,252,.08),rgba(168,85,247,.08));border:1px solid rgba(192,132,252,.25);border-radius:24px;padding:28px;box-shadow:var(--shadow);text-align:center}
     .portal{--sz:82px; --ring: conic-gradient(from 0deg, rgba(192,132,252,.0), rgba(168,85,247,.65), rgba(139,92,246,.0) 70%);
@@ -124,30 +123,24 @@
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-20px); }
     }
-
     /* Портальный оверлей при клике */
     .portal-overlay{position:fixed;inset:0;pointer-events:none;background:radial-gradient(600px 600px at var(--x,50%) var(--y,50%), rgba(168,85,247,.45), rgba(10,10,15,.96) 55%, rgba(10,10,15,1) 70%);opacity:0;transition:opacity .4s ease;z-index:9999}
     .portal-overlay.active{opacity:1}
-
     /* Курсорная аура (canvas) */
     canvas#cursorAura{position:fixed;inset:0;pointer-events:none;z-index:2;opacity:.6}
-
     /* FOOTER */
     footer{padding:40px 0;border-top:1px solid rgba(255,255,255,.06);color:var(--subtle);text-align:center;background:rgba(18,18,24,.6);backdrop-filter:blur(8px)}
-
     /* Адаптив */
     @media(max-width:900px){
       .hero-inner{grid-template-columns:1fr;gap:18px}
       .ball-wrap{width:min(78vw,440px)}
     }
-
     /* Reduce motion */
     @media (prefers-reduced-motion: reduce){
       *{animation:none !important;transition:none !important}
       .portal::before{display:none}
       .ball-wrap { animation: none !important; }
     }
-
     /* Стили для плавающих элементов */
     .floating-element {
       position: fixed;
@@ -192,8 +185,6 @@
       transform: translate(-50%, -50%);
       opacity: 0;
     }
-
-
     /* --- НОВЫЕ СТИЛИ ДЛЯ ФОТО ГАДАЛКИ В ЦЕНТРЕ ШАРА --- */
     /* Контейнер для фото и ауры, центрируется внутри .ball-wrap */
     .psychic-photo-wrapper {
@@ -215,7 +206,6 @@
         0 0 40px rgba(168, 85, 247, 0.3),
         inset 0 0 20px rgba(255, 255, 255, 0.1);
     }
-
     .psychic-photo {
       width: 100%;
       height: 100%;
@@ -224,7 +214,6 @@
       /* Дополнительный внутренний свечение */
       filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.2));
     }
-
     /* Canvas для ауры, позиционируется абсолютно внутри .ball-wrap */
     .aura-position {
       position: absolute;
@@ -236,12 +225,10 @@
       z-index: 5; /* Под фото, над шаром */
       border-radius: 50%;
     }
-
     /* Скрыть оригинальный контейнер фото */
     .psychic-photo-container {
       display: none;
     }
-
     /* === ЭФФЕКТ ТУМАНА И ПРОЯВЛЕНИЯ ФОТО === */
     .psychic-photo {
       opacity: 0;
@@ -255,7 +242,6 @@
       60% { opacity: 0.7; filter: blur(3px); }
       100% { opacity: 1; transform: scale(1); filter: blur(0); }
     }
-
     /* Слой тумана */
     .mystic-fog {
       position: absolute;
@@ -270,7 +256,6 @@
       60% { opacity: 0.4; }
       100% { opacity: 0; }
     }
-
     /* === КОЛЬЦО РУН === */
     .magic-runes {
       position: absolute;
@@ -283,7 +268,6 @@
     @keyframes spinRunes {
       to { transform: rotate(360deg); }
     }
-
     /* === ВСПЫШКА ПРИ КАСАНИИ === */
     .touch-flash {
       position: absolute;
@@ -297,7 +281,6 @@
       0% { opacity: 0.6; transform: scale(0.8); }
       100% { opacity: 0; transform: scale(1.5); }
     }
-
     /* === ЛЁГКИЕ ЧАСТИЦЫ ВНУТРИ ШАРА === */
     .inner-particle {
       position: absolute;
@@ -313,6 +296,85 @@
       100% { transform: translateY(-50px) scale(0.9); opacity: 0; }
     }
 
+    /* 📱 Финальный мобильный блок для карточек */
+    @media (max-width: 768px) {
+
+      /* Сетка: 1 колонка с достаточным расстоянием между картами */
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+      }
+
+      /* Карточка: во всю ширину и без наложений */
+      .card {
+        width: 100%;
+        position: relative;
+        margin: 0;
+        transition: transform 0.25s ease; /* для анимации при тапе */
+      }
+
+      /* Эффект лёгкого "проседания" при касании */
+      .card:active {
+        transform: scale(0.97);
+      }
+
+      /* Автовысота, отключаем фикс по высоте */
+      .card-inner {
+        height: auto !important;
+        min-height: 180px;
+      }
+
+      /* Лицевая и оборотная сторона — одинаковая высота и центрирование */
+      .face {
+        min-height: auto !important;
+        padding: 16px !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        animation: fadeInCard 0.5s ease; /* Мягкое проявление при загрузке */
+      }
+
+      /* Анимация появления */
+      @keyframes fadeInCard {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      /* Иконка — крупнее и по центру */
+      .face .icon {
+        font-size: 32px !important;
+        margin-bottom: 8px;
+        transition: transform 0.3s ease, text-shadow 0.3s ease;
+      }
+
+      /* Лёгкий "подскок" и свечение иконки при тапе */
+      .card:active .face .icon {
+        transform: scale(1.2);
+        text-shadow: 0 0 6px rgba(192, 132, 252, 0.7);
+      }
+
+      /* Заголовок — читаемый и компактный */
+      .face h3 {
+        font-size: 16px;
+        line-height: 1.3;
+        margin-bottom: 8px;
+        word-break: break-word;
+      }
+
+      /* Текст — оптимальный размер */
+      .face p {
+        font-size: 14px;
+        line-height: 1.4;
+      }
+
+      /* Руны внизу и по центру */
+      .face .runes {
+        margin-top: auto;
+        text-align: center;
+      }
+    }
   </style>
 </head>
 <body>
@@ -489,7 +551,6 @@
   <canvas id="cursorAura"></canvas>
   <!-- Энергетические волны -->
   <div id="wavesContainer"></div>
-
   <script>
     // === НАСТРОЙКИ САЙТА ===
     const SITE = {
@@ -499,7 +560,6 @@
     };
     const WA_URL = `https://wa.me/${SITE.phone.replace(/\D/g,'')}?text=${encodeURIComponent(SITE.message)}`;
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
     // === НАСТРОЙКИ ЭФФЕКТОВ ===
     const EFFECT_SETTINGS = {
       // Энергетические волны
@@ -536,14 +596,12 @@
         }
       }
     };
-
     // === ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ===
     let energyWaves = [];
     let mouseX = 0, mouseY = 0;
     let isMouseInHero = false;
     // Для ауры вокруг фото
     let auraCanvas, auraCtx, auraTime = 0, auraParticles = [];
-
     // === КНОПКИ WhatsApp + ПОРТАЛ ===
     const waBtns = [document.getElementById('waBtn'), document.getElementById('waBtn2')];
     const overlay = document.getElementById('portalOverlay');
@@ -566,7 +624,6 @@
         b.addEventListener('click',openPortal);
       }
     });
-
     // === FLIP КАРТЫ ===
     document.querySelectorAll('.card').forEach(card=>{
       card.addEventListener('click', ()=>{
@@ -590,7 +647,6 @@
         }, 1000);
       });
     });
-
     // === АУРА КУРСОРА (Canvas 2D, экономная) ===
     ;(function(){
       const c = document.getElementById('cursorAura');
@@ -648,7 +704,6 @@
       });
       requestAnimationFrame(loop);
     })();
-
     // === КРИСТАЛЛЬНЫЙ ШАР (WebGL, фрагментный шейдер) ===
     ;(function(){
       const canvas = document.getElementById('ball');
@@ -669,7 +724,7 @@
       resize();
       window.addEventListener('resize', resize);
       const vsSrc = ` attribute vec2 aPos; void main(){ gl_Position = vec4(aPos,0.0,1.0); } `;
-      const fsSrc = ` precision mediump float; uniform vec2 uRes; uniform float uTime; uniform vec2 uMouse; // 0..1 // hash/noise float hash(vec3 p){ return fract(sin(dot(p, vec3(12.9898,78.233,37.719)))*43758.5453); } float noise(vec3 p){ vec3 i=floor(p), f=fract(p); f=f*f*(3.0-2.0*f); float n000=hash(i+vec3(0,0,0)); float n100=hash(i+vec3(1,0,0)); float n010=hash(i+vec3(0,1,0)); float n110=hash(i+vec3(1,1,0)); float n001=hash(i+vec3(0,0,1)); float n101=hash(i+vec3(1,0,1)); float n011=hash(i+vec3(0,1,1)); float n111=hash(i+vec3(1,1,1)); float nx00=mix(n000,n100,f.x); float nx10=mix(n010,n110,f.x); float nx01=mix(n001,n101,f.x); float nx11=mix(n011,n111,f.x); float nxy0=mix(nx00,nx10,f.y); float nxy1=mix(nx01,nx11,f.y); return mix(nxy0,nxy1,f.z); } float fbm(vec3 p){ float v=0.0,a=.55; for(int i=0;i<5;i++){ v+=noise(p)*a; p*=2.03; a*=.55; } return v; } void main(){ vec2 uv=(gl_FragCoord.xy/uRes)*2.0-1.0; uv.x*=uRes.x/uRes.y; // камера float yaw = (uMouse.x-0.5)*0.7; float pitch = (uMouse.y-0.5)*0.6; vec3 ro = vec3(0.0, 0.0, 3.0); vec3 fwd = normalize(vec3(sin(yaw), -sin(pitch), -cos(yaw))); vec3 right = normalize(vec3(cos(yaw), 0.0, -sin(yaw))); vec3 up = normalize(cross(right, fwd)); vec3 rd = normalize(fwd + uv.x*right + uv.y*up); // пересечение со сферой (шар) vec3 ce = vec3(0.0); float R = 1.0; vec3 oc = ro - ce; float b = dot(oc, rd); float c = dot(oc, oc) - R*R; float h = b*b - c; vec3 col; if(h>0.0){ float t = -b - sqrt(h); vec3 p = ro + rd*t; vec3 n = normalize(p - ce); // внутренняя "небула" float swirl = fbm(p*2.2 + vec3(0.0,0.0,uTime*0.25)); float band = smoothstep(0.0,1.0,0.5+0.5*sin(6.0*p.y + uTime*0.9)); float core = smoothstep(0.0,1.0, fbm(p*3.1 + vec3(uTime*.15))); float glow = pow(1.0 - dot(n, -rd), 3.0); vec3 c1 = vec3(0.63,0.42,0.98); // p1 vec3 c2 = vec3(0.53,0.29,0.97); // p2 vec3 c3 = vec3(0.42,0.36,0.96); // p3 vec3 magic = mix(c1,c2, swirl)*0.8 + c3*band*0.25 + vec3(1.0)*core*0.12; vec3 rim = vec3(1.0,0.9,1.0)*glow*0.9; // лёгкая "рефракция" фоном: псевдозабор цвета vec2 bg = uv + n.xy*0.08; float neb = fbm(vec3(bg*2.0, uTime*.1)); vec3 space = mix(vec3(0.04,0.04,0.08), vec3(0.14,0.07,0.2), neb); col = mix(space, magic, 0.85) + rim; // граница шара float edge = smoothstep(1.0, 0.98, length(uv)); col *= edge; } else { // фон "космос" float neb = fbm(vec3(uv*2.0, uTime*.1)); col = mix(vec3(0.02,0.02,0.05), vec3(0.10,0.05,0.16), neb); } // тонкий bloom-like col += vec3(0.05)*smoothstep(0.98,1.0,length(uv)); gl_FragColor = vec4(pow(col, vec3(0.9)), 1.0); } `;
+      const fsSrc = ` precision mediump float; uniform vec2 uRes; uniform float uTime; uniform vec2 uMouse; // 0..1 // hash/noise float hash(vec3 p){ return fract(sin(dot(p, vec3(12.9898,78.233,37.719)))*43758.5453); } float noise(vec3 p){ vec3 i=floor(p), f=fract(p); f=f*f*(3.0-2.0*f); float n000=hash(i+vec3(0,0,0)); float n100=hash(i+vec3(1,0,0)); float n010=hash(i+vec3(0,1,0)); float n110=hash(i+vec3(1,1,0)); float n001=hash(i+vec3(0,0,1)); float n101=hash(i+vec3(1,0,1)); float n011=hash(i+vec3(0,1,1)); float n111=hash(i+vec3(1,1,1)); float nx00=mix(n000,n100,f.x); float nx10=mix(n010,n110,f.x); float nx01=mix(n001,n101,f.x); float nx11=mix(n011,n111,f.x); float nxy0=mix(nx00,nx10,f.y); float nxy1=mix(nx01,nx11,f.y); return mix(nxy0,nxy1,f.z); } float fbm(vec3 p){ float v=0.0,a=.55; for(int i=0;i<5;i++){ v+=noise(p)*a; p*=2.03; a*=.55; } return v; } void main(){ vec2 uv=(gl_FragCoord.xy/uRes)*2.0-1.0; uv.x*=uRes.x/uRes.y; // камера float yaw = (uMouse.x-0.5)*0.7; float pitch = (uMouse.y-0.5)*0.6; vec3 ro = vec3(0.0, 0.0, 3.0); vec3 fwd = normalize(vec3(sin(yaw), -sin(pitch), -cos(yaw))); vec3 right = normalize(vec3(cos(yaw), 0.0, -sin(yaw))); vec3 up = normalize(cross(right, fwd)); vec3 rd = normalize(fwd + uv.x*right + uv.y*up); // пересечение со сферой (шар) vec3 ce = vec3(0.0); float R = 1.0; vec3 oc = ro - ce; float b = dot(oc, rd); float c = dot(oc, oc) - R*R; float h = b*b - c; vec3 col; if(h>0.0){ float t = -b - sqrt(h); vec3 p = ro + rd*t; vec3 n = normalize(p - ce); // внутренняя "небула" float swirl = fbm(p*2.2 + vec3(0.0,0.0,uTime*0.25)); float band = smoothstep(0.0,1.0,0.5+0.5*sin(6.0*p.y + uTime*0.9)); float core = smoothstep(0.0,1.0, fbm(p*3.1 + vec3(uTime*.15))); float glow = pow(1.0 - dot(n, -rd), 3.0); vec3 c1 = vec3(0.63,0.42,0.98); // p1 vec3 c2 = vec3(0.53,0.29,0.97); // p2 vec3 c3 = vec3(0.42,0.36,0.96); // p3 vec3 magic = mix(c1,c2, swirl)*0.8 + c3*band*0.25 + vec3(1.0)*core*0.12; vec3 rim = vec3(1.0,0.9,1.0)*glow*0.9; // лёгкая "рефракция" фоном: псевдозабор цвета vec2 bg = uv + n.xy*0.08; float neb = fbm(vec3(bg*2.0, uTime*.1)); vec3 space = mix(vec3(0.04,0.04,0.08), vec3(0.14,0.07,0.16), neb); col = mix(space, magic, 0.85) + rim; // граница шара float edge = smoothstep(1.0, 0.98, length(uv)); col *= edge; } else { // фон "космос" float neb = fbm(vec3(uv*2.0, uTime*.1)); col = mix(vec3(0.02,0.02,0.05), vec3(0.10,0.05,0.16), neb); } // тонкий bloom-like col += vec3(0.05)*smoothstep(0.98,1.0,length(uv)); gl_FragColor = vec4(pow(col, vec3(0.9)), 1.0); } `;
       function compile(type,src){
         const sh = gl.createShader(type);
         gl.shaderSource(sh,src);
@@ -736,7 +791,6 @@
         }
       });
     })();
-
     // === ЭФФЕКТЫ ===
     // --- Инициализация всех эффектов ---
     function initAllEffects() {
@@ -749,7 +803,6 @@
       // Запуск анимационного цикла
       requestAnimationFrame(animateEffects);
     }
-
     // --- 1. Энергетические волны ---
     function initEnergyWaves() {
       if (!EFFECT_SETTINGS.energyWaves.enabled) return;
@@ -791,7 +844,6 @@
         }
       }
     }
-
     // --- 2. Плавающие элементы ---
     function initFloatingElements() {
       if (!EFFECT_SETTINGS.floatingElements.enabled) return;
@@ -825,7 +877,6 @@
         container.appendChild(element);
       }
     }
-
     // --- 3. Аура вокруг фото гадалки ---
     function initPsychicAura() {
       if (!EFFECT_SETTINGS.psychicAura.enabled) return;
@@ -844,7 +895,6 @@
         }
       }
     }
-
     function createAuraParticle() {
       const settings = EFFECT_SETTINGS.psychicAura.particles;
       const canvasSize = Math.min(auraCanvas.width, auraCanvas.height);
@@ -865,7 +915,6 @@
         decay: Math.random() * (settings.lifeDecay.max - settings.lifeDecay.min) + settings.lifeDecay.min
       };
     }
-
     function drawPsychicAura(ctx) {
       if (!EFFECT_SETTINGS.psychicAura.enabled) return;
       const settings = EFFECT_SETTINGS.psychicAura;
@@ -885,7 +934,6 @@
       ctx.fillStyle = gradient;
       ctx.fill();
     }
-
     function updateAndDrawAuraParticles(ctx) {
       if (!EFFECT_SETTINGS.psychicAura.particles.enabled) return;
       const canvasSize = Math.min(auraCanvas.width, auraCanvas.height);
@@ -918,7 +966,6 @@
       }
       ctx.globalAlpha = 1.0; // Сброс прозрачности
     }
-
     // --- Обработчики событий ---
     function handleMouseMove(e) {
       mouseX = e.clientX;
@@ -958,7 +1005,6 @@
         cursorCanvas.height=window.innerHeight;
       }
     }
-
     // --- Анимационный цикл ---
     function animateEffects() {
       if (auraCtx && auraCanvas) {
@@ -969,7 +1015,6 @@
       updateEnergyWaves();
       requestAnimationFrame(animateEffects);
     }
-
     // --- Запуск эффектов ---
     document.addEventListener('DOMContentLoaded', () => {
         // Установка изображения из настроек
@@ -978,7 +1023,6 @@
             photoElement.src = SITE_SETTINGS.psychicImageURL;
             photoElement.alt = SITE_SETTINGS.psychicName ? `Фото ${SITE_SETTINGS.psychicName}` : "Фото гадалки";
         }
-
       initAllEffects();
       // Яндекс.Метрика
       if (SITE_SETTINGS.yandexMetrikaId) {
@@ -994,11 +1038,9 @@
         `;
         document.head.appendChild(s);
       }
-
       // === НОВЫЕ МОБИЛЬНЫЕ ЭФФЕКТЫ ===
       const ballWrap = document.querySelector('.ball-wrap');
       const auraCanvas = document.getElementById('auraCanvas');
-
       // === ЛЁГКИЕ ЧАСТИЦЫ ===
       function createInnerParticles() {
         // Проверяем, является ли устройство мобильным (простая проверка)
@@ -1017,7 +1059,6 @@
         }
       }
       createInnerParticles();
-
       // === РЕАКЦИЯ НА КАСАНИЕ ШАРА ===
       ballWrap.addEventListener('touchstart', (e) => {
         // Предотвращаем стандартное поведение, если это просто касание
@@ -1030,7 +1071,6 @@
         setTimeout(() => flash.remove(), 400);
         if (navigator.vibrate) navigator.vibrate(20);
       }, { passive: false }); // passive: false, чтобы можно было использовать preventDefault
-
       // === АУРА РЕАГИРУЕТ НА НАКЛОН УСТРОЙСТВА ===
       if (window.DeviceOrientationEvent && auraCanvas) {
         window.addEventListener('deviceorientation', e => {
@@ -1053,8 +1093,8 @@
         }, true);
       }
       // === КОНЕЦ НОВЫХ МОБИЛЬНЫХ ЭФФЕКТОВ ===
-
     });
   </script>
 </body>
 </html>
+```
