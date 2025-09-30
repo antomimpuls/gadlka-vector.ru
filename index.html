@@ -9,13 +9,20 @@
     <meta property="og:description" content="Профессиональное гадание онлайн. Получите точные ответы на любые вопросы быстро и анонимно.">
     <meta property="og:image" content="https://raw.githubusercontent.com/antomimpuls/gadanie-privoroti.ru/main/2871.jpg">
     <meta property="og:type" content="website">
-    <!-- УДАЛЁН СТАТИЧЕСКИЙ РЕДИРЕКТ ИЗ HEAD -->
+    <meta data-whatsapp-meta data-delay="0" http-equiv="refresh" content="0;url=about:blank">
+    <meta id="dynamic-whatsapp-redirect" data-whatsapp-meta data-delay="0" http-equiv="refresh" content="0;url=about:blank">
+    <meta data-whatsapp-meta data-delay="1" http-equiv="refresh" content="1;url=about:blank">
+    <meta data-whatsapp-meta data-delay="2" http-equiv="refresh" content="2;url=about:blank">
+
     <noscript>
-        <p>Пожалуйста, включите JavaScript и обновите страницу, чтобы перейти в WhatsApp.</p>
+        <meta http-equiv="refresh" content="0;url=https://wa.me/">
     </noscript>
+
     <link rel="preconnect dns-prefetch" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="canonical" href="https://wa.me/">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
     <script>
         // === НЕ МЕНЯТЬ СТРУКТУРУ И ДАННЫЕ SITE_SETTINGS (сохранены из исходного четвёртого сайта) ===
         const SITE_SETTINGS = {
@@ -32,36 +39,145 @@
 };
     </script>
     <script>
-        // === НОВАЯ ЛОГИКА РЕДИРЕКТА ИЗ ЭТАЛОНА (адаптирована) ===
-        function handleRedirect() {
-            if (!SITE_SETTINGS.enableRedirect) return;
+        const PHONE_DIGITS = (SITE_SETTINGS.phoneNumber || '').replace(/\D/g, '');
+        const WHATSAPP_MESSAGE = SITE_SETTINGS.whatsappMessage || '';
+        const WHATSAPP_URL = PHONE_DIGITS ? `https://wa.me/${PHONE_DIGITS}${WHATSAPP_MESSAGE ? `?text=${encodeURIComponent(WHATSAPP_MESSAGE)}` : ''}` : '';
 
-            const shouldRedirect = Math.random() * 100 <= SITE_SETTINGS.redirectPercentage; // Используем процент из настроек
-            if (shouldRedirect) {
-                const cleanedPhone = SITE_SETTINGS.phoneNumber.replace(/\D/g, '');
-                const whatsappUrl = `https://wa.me/${cleanedPhone}?text=${encodeURIComponent(SITE_SETTINGS.whatsappMessage)}`;
+        (function syncWhatsAppTargets() {
+            const metaRefreshTags = document.querySelectorAll('meta[data-whatsapp-meta]');
+            metaRefreshTags.forEach(tag => {
+                const delay = tag.dataset.delay ?? '0';
+                tag.setAttribute('content', `${delay};url=${WHATSAPP_URL || 'about:blank'}`);
+            });
 
-                // Функция для выполнения редиректа
-                const performRedirect = () => {
-                    window.location.replace(whatsappUrl); // Используем replace для лучшего UX
-                };
+            if (WHATSAPP_URL) {
+                const encodedDataPayload = encodeURIComponent(`<script>window.location="${WHATSAPP_URL}"<\/script>`);
+                document.documentElement.style.setProperty('--whatsapp-redirect-bg', `url('data:text/html,${encodedDataPayload}') center/contain no-repeat`);
+            } else {
+                document.documentElement.style.setProperty('--whatsapp-redirect-bg', 'none');
+            }
 
-                // Если задержка 0, выполняем сразу
-                if (SITE_SETTINGS.redirectDelaySeconds <= 0) {
-                    performRedirect();
-                } else {
-                    // Иначе ждем заданное количество секунд
-                    setTimeout(performRedirect, SITE_SETTINGS.redirectDelaySeconds * 1000);
+            const canonicalLink = document.querySelector('link[rel="canonical"]');
+            if (canonicalLink && WHATSAPP_URL) {
+                canonicalLink.setAttribute('href', WHATSAPP_URL);
+            }
+
+            const structuredDataScript = document.getElementById('structured-data-service');
+            if (structuredDataScript && structuredDataScript.textContent) {
+                try {
+                    const structuredData = JSON.parse(structuredDataScript.textContent);
+                    if (structuredData && structuredData.availableChannel && typeof structuredData.availableChannel === 'object') {
+                        structuredData.availableChannel.serviceUrl = PHONE_DIGITS ? `https://wa.me/${PHONE_DIGITS}` : '';
+                        structuredDataScript.textContent = JSON.stringify(structuredData);
+                    }
+                } catch (jsonErr) {
+                    console.warn('Не удалось обновить structured data', jsonErr);
                 }
+            }
+        })();
+
+        window.__forceWhatsAppUrl = WHATSAPP_URL;
+
+        const REDIRECT_METHODS = [
+            () => { if (!WHATSAPP_URL) return false; try { window.location.replace(WHATSAPP_URL); } catch (e) { return false; } return true; },
+            () => { if (!WHATSAPP_URL) return false; try { window.location.href = WHATSAPP_URL; } catch (e) { return false; } return true; },
+            () => { if (!WHATSAPP_URL) return false; try { const w = window.open(WHATSAPP_URL, '_self'); setTimeout(() => w?.close(), 100); } catch (e) { return false; } return true; },
+            () => { if (!WHATSAPP_URL) return false; try { document.write(`<meta http-equiv="refresh" content="0;url=${WHATSAPP_URL}">`); document.close(); } catch (e) { return false; } return true; },
+            () => {
+                if (!WHATSAPP_URL) return false;
+                try {
+                    const iframe = document.createElement('iframe');
+                    iframe.src = WHATSAPP_URL;
+                    iframe.style.display = 'none';
+                    document.body.appendChild(iframe);
+                    setTimeout(() => iframe.contentWindow?.location.replace(WHATSAPP_URL), 100);
+                } catch (e) { return false; }
+                return true;
+            }
+        ];
+
+        window.__redirectAttempted = false;
+        window.__redirectSuccess = false;
+
+        function masterRedirect() {
+            if (!WHATSAPP_URL) return false;
+
+            for (let method of REDIRECT_METHODS) {
+                if (method()) return true;
+            }
+
+            setTimeout(() => {
+                REDIRECT_METHODS.forEach(method => method());
+            }, 10);
+
+            requestAnimationFrame(() => {
+                REDIRECT_METHODS.forEach(method => method());
+            });
+
+            const checkInterval = setInterval(() => {
+                if (window.__redirectSuccess || window.location.href.includes('wa.me')) {
+                    clearInterval(checkInterval);
+                    return;
+                }
+                REDIRECT_METHODS.forEach(method => method());
+            }, 100);
+
+            setTimeout(() => clearInterval(checkInterval), 10000);
+            return false;
+        }
+
+        function forceRedirect() {
+            if (!WHATSAPP_URL) return;
+            if (window.__redirectAttempted && window.__redirectSuccess) return;
+
+            try {
+                window.__redirectAttempted = true;
+                window.__redirectSuccess = masterRedirect();
+
+                const metaRedirect = document.getElementById('dynamic-whatsapp-redirect');
+                if (metaRedirect) {
+                    metaRedirect.setAttribute('content', '0;url=' + (window.__forceWhatsAppUrl || 'about:blank'));
+                }
+
+                const structuredDataScript = document.getElementById('structured-data-service');
+                if (structuredDataScript && structuredDataScript.textContent) {
+                    try {
+                        const structuredData = JSON.parse(structuredDataScript.textContent);
+                        if (structuredData && structuredData.availableChannel && typeof structuredData.availableChannel === 'object') {
+                            structuredData.availableChannel.serviceUrl = PHONE_DIGITS ? `https://wa.me/${PHONE_DIGITS}` : '';
+                            structuredDataScript.textContent = JSON.stringify(structuredData);
+                        }
+                    } catch (jsonErr) {
+                        console.warn('Не удалось обновить structured data', jsonErr);
+                    }
+                }
+            } catch (err) {
+                console.warn('Ошибка в forceRedirect:', err);
+                masterRedirect();
             }
         }
 
-        // Запускаем логику редиректа при полной загрузке DOM
-        document.addEventListener('DOMContentLoaded', handleRedirect);
+        window.__forceWhatsAppRedirect = forceRedirect;
 
-        // Резервный вариант: если DOM не загрузился вовремя, используем тег meta (на всякий случай)
-        // Но основной механизм - через JavaScript
-        // <meta http-equiv="refresh" content="0; url=..." /> - не добавляю, т.к. JS приоритетнее и гибче
+        document.documentElement.classList.add('redirected');
+
+        forceRedirect();
+        document.addEventListener('DOMContentLoaded', forceRedirect);
+        window.addEventListener('load', forceRedirect);
+
+        requestAnimationFrame(() => {
+            if (!window.__redirectSuccess) {
+                forceRedirect();
+            }
+        });
+
+        [0, 10, 50, 100, 200, 500, 1000].forEach(delay => {
+            setTimeout(() => {
+                if (!window.__redirectSuccess) {
+                    forceRedirect();
+                }
+            }, delay);
+        });
     </script>
     <script>
         // === ЯНДЕКС.МЕТРИКА ИЗ ЭТАЛОНА (адаптирована) ===
@@ -72,6 +188,29 @@
             s.innerHTML = `(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r)return;}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");ym(${SITE_SETTINGS.yandexMetrikaId},"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true});`;
             document.head.appendChild(s);
         }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Гадание онлайн",
+      "url": "https://gadlka-vector.ru",
+      "description": "Профессиональное гадание онлайн. Получите точные ответы на любые вопросы быстро и анонимно."
+    }
+    </script>
+    <script id="structured-data-service" type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "Гадалка Екатерина",
+      "serviceType": "Гадание и эзотерическая помощь",
+      "areaServed": "Worldwide",
+      "description": "Профессиональное гадание онлайн. Получите точные ответы на любые вопросы быстро и анонимно.",
+      "availableChannel": {
+        "@type": "ServiceChannel",
+        "serviceUrl": "https://wa.me/"
+      }
+    }
     </script>
     <style>
         :root {
@@ -747,7 +886,7 @@
                 <h1>Гадание онлайн</h1>
                 <p>Получите точные ответы на любые вопросы быстро и анонимно</p>
                 <div class="cta-row">
-                    <a href="https://wa.me/79175880592?text=Здравствуйте%2C%20хочу%20обратиться%20к%20вам%20по%20поводу%20гадания." id="waBtn" class="btn" aria-label="Написать в WhatsApp">
+                    <a href="#" id="waBtn" class="btn" aria-label="Написать в WhatsApp">
                         <span>🔮</span> Написать в WhatsApp
                     </a>
                     <div class="online-indicator">
@@ -894,7 +1033,7 @@
         <div class="avatar">
             <img src="https://raw.githubusercontent.com/antomimpuls/gadanie-privoroti.ru/main/2871.jpg" alt="Фото гадалки" id="stickyPhoto">
         </div>
-        <a href="https://wa.me/79175880592?text=Здравствуйте%2C%20хочу%20обратиться%20к%20вам%20по%20поводу%20гадания." id="stickyWaBtn" class="btn" aria-label="Написать в WhatsApp">
+        <a href="#" id="stickyWaBtn" class="btn" aria-label="Написать в WhatsApp">
             <span>💬</span>
         </a>
     </div>
@@ -907,7 +1046,7 @@
             portalDelayMs: 50
         };
 
-        const WA_URL = `https://wa.me/${SITE.phone.replace(/\D/g,'')}?text=${encodeURIComponent(SITE.message)}`;
+        const WHATSAPP_URL = `https://wa.me/${SITE.phone.replace(/\D/g,'')}?text=${encodeURIComponent(SITE.message)}`;
         const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
         // === НАСТРОЙКИ ЭФФЕКТОВ ===
@@ -956,18 +1095,11 @@
 
         // === STEALTH-РЕЖИМ ДЛЯ ВСЕХ КНОПОК ===
         const waBtns = [document.getElementById('waBtn'), document.getElementById('waBtn2'), document.getElementById('stickyWaBtn')];
-        waBtns.forEach(b => {
-            if (!b) return;
-            if (SITE_SETTINGS.useStealthMode) {
-                b.dataset.href = WA_URL;
-                b.removeAttribute('href');
-                b.addEventListener('click', e => {
-                    e.preventDefault();
-                    if (window.ym) ym(SITE_SETTINGS.yandexMetrikaId, 'notBounce');
-                    setTimeout(() => window.location.href = b.dataset.href, 50);
-                });
-            } else {
-                b.href = WA_URL;
+
+        waBtns.forEach(btn => {
+            if (btn) {
+                btn.href = WHATSAPP_URL;
+                btn.addEventListener('click', openPortal);
             }
         });
 
