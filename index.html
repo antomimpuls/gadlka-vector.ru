@@ -21,7 +21,7 @@ const SITE_SETTINGS = {
   'siteUrl': 'https://gadalka-vector.ru/',
   'whatsappMessage': 'Здравствуйте, хочу обратиться к вам за помощью.',
   'yandexMetrikaId': '105065286',
-  'psychicImageURL': https://raw.githubusercontent.com/antomimpuls/gadlka-vector.ru/main/92ddbc.jpg',
+  'psychicImageURL': 'https://raw.githubusercontent.com/antomimpuls/gadlka-vector.ru/main/92ddbc.jpg',
   'workingHours': 'ежедневно 09:00-22:00',
   'responseTime': '3 минуты'
 };
@@ -157,7 +157,7 @@ footer{background:#0a0814;padding:40px 0;text-align:center;border-top:1px solid 
 <body>
 
 <div class="sticky-wa">
-<a href="https://wa.me/79604485578" class="btn btn-wa" target="_blank" rel="noopener">📲 Чат в WhatsApp</a>
+<a href="https://wa.me/79604485578" class="btn btn-wa" target="_blank" rel="noopener" data-wa>📲 Чат в WhatsApp</a>
 </div>
 
 <section class="hero">
@@ -172,14 +172,14 @@ footer{background:#0a0814;padding:40px 0;text-align:center;border-top:1px solid 
         <div>
         <span class="badge">🔮 Практикующий маг • 15 лет опыта</span>
         <h1>Снятие порчи, сглаза и приворот на любовь</h1>
-        <p style="font-size:clamp(1.1rem,2.5vw,1.3rem);color:#ffe0e6;font-weight:500">Виктория — профессиональный маг по снятию порчи и сглаза. Делаю сильные привороты на любовь, возвращаю любимых. Пишите в WhatsApp — отвечу быстро.</p>
+        <p style="font-size:clamp(1.1rem,2.5vw,1.3rem);color:#ffe0e6;font-weight:500" id="heroDescription">Профессиональный маг по снятию порчи и сглаза. Делаю сильные привороты на любовь, возвращаю любимых. Пишите в WhatsApp — отвечу быстро.</p>
         <div class="trust-grid">
         <div class="trust-item"><span style="font-size:1.5rem">🛡️</span><span style="font-size:0.85rem;font-weight:600">Снятие порчи и сглаза</span></div>
 <div class="trust-item"><span style="font-size:1.5rem">💖</span><span style="font-size:0.85rem;font-weight:600">Приворот на любовь</span></div>
 <div class="trust-item"><span style="font-size:1.5rem">🔥</span><span style="font-size:0.85rem;font-weight:600">Возврат любимого</span></div>
 <div class="trust-item"><span style="font-size:1.5rem">💬</span><span style="font-size:0.85rem;font-weight:600">Консультация в WhatsApp</span></div>
         </div>
-        <a href="https://wa.me/79604485578" class="btn" style="margin-top:25px" target="_blank" rel="noopener">📲 Написать в WhatsApp</a>
+        <a href="https://wa.me/79604485578" class="btn" style="margin-top:25px" target="_blank" rel="noopener" data-wa>📲 Написать в WhatsApp</a>
         <a href="tel:+7 (960) 448-55-78" class="phone-link" id="phoneLink">
         <span style="font-size:1.5rem">📞</span>
         <span id="phoneDisplay">+7 (960) 448-55-78</span>
@@ -493,7 +493,7 @@ footer{background:#0a0814;padding:40px 0;text-align:center;border-top:1px solid 
 <h2>Нужна помощь? Напишите в WhatsApp</h2>
 <p style="font-size:1.2rem;color:#e6f6ff">Опишите вашу ситуацию — я проведу диагностику и подскажу, как решить проблему. Отвечаю быстро.</p>
 <div class="cta-buttons">
-<a href="https://wa.me/79604485578" class="btn btn-wa" target="_blank" rel="noopener">💬 Написать в WhatsApp</a>
+<a href="https://wa.me/79604485578" class="btn btn-wa" target="_blank" rel="noopener" data-wa>💬 Написать в WhatsApp</a>
 </div>
 <p style="margin-top:15px;color:#9cb7d1">🕑 Средний ответ — 3 минуты • работаю ежедневно 09:00-22:00.</p>
 <div class="urgency">
@@ -506,7 +506,7 @@ footer{background:#0a0814;padding:40px 0;text-align:center;border-top:1px solid 
 <footer>
 <div class="container">
 <div style="font-size:1.5rem;font-weight:800;background:linear-gradient(135deg,#bfeeff,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:15px" id="footerName"></div>
-<p style="color:#9cb7d1;max-width:600px;margin:0 auto 20px">Полина — практикующий маг. Снимаю порчу, сглаз, делаю привороты, возвращаю любимых. Консультации в WhatsApp.</p>
+<p style="color:#9cb7d1;max-width:600px;margin:0 auto 20px" id="footerDescription">Практикующий маг. Снимаю порчу, сглаз, делаю привороты, возвращаю любимых. Консультации в WhatsApp.</p>
 <p style="margin-bottom:15px"><a href="#" onclick="openPrivacyModal();return false" style="color:#38bdf8;text-decoration:none;font-size:0.9rem;transition:color 0.3s;cursor:pointer" onmouseover="this.style.color='#bfeeff'" onmouseout="this.style.color='#38bdf8'">🧾 Политика конфиденциальности</a></p>
 <p style="color:rgba(255,255,255,0.3);font-size:0.85rem">© 2025 Все права защищены</p>
 </div>
@@ -574,17 +574,29 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
         if(el){window.scrollTo({top:el.offsetTop-80,behavior:'smooth'})}
     });
 });
-const TARGET_WA_URL=window.__TARGET_WA_URL__;
-const buttons=Array.from(document.querySelectorAll('[data-wa],.btn[href*="whatsapp"],.btn[href*="wa.me"]'));
-const handleClick=(e)=>{
-    if(typeof ym==='function'&&SITE_SETTINGS.yandexMetrikaId){
-        try{ym(SITE_SETTINGS.yandexMetrikaId,'reachGoal','wa_click')}catch(err){}
-    }
-};
-buttons.forEach(btn=>{
-    if(btn.tagName==='A'){btn.href=TARGET_WA_URL;btn.target='_blank';btn.rel='noopener noreferrer'}
-    btn.addEventListener('click',handleClick)
-});
+
+// Обновление WhatsApp кнопок
+function updateWhatsAppButtons(){
+    const TARGET_WA_URL=window.__TARGET_WA_URL__;
+    const buttons=Array.from(document.querySelectorAll('[data-wa],.btn[href*="whatsapp"],.btn[href*="wa.me"],.sticky-wa a'));
+    const handleClick=(e)=>{
+        if(typeof ym==='function'&&SITE_SETTINGS.yandexMetrikaId){
+            try{ym(SITE_SETTINGS.yandexMetrikaId,'reachGoal','wa_click')}catch(err){}
+        }
+    };
+    buttons.forEach(btn=>{
+        if(btn.tagName==='A'){
+            btn.href=TARGET_WA_URL;
+            btn.target='_blank';
+            btn.rel='noopener noreferrer'
+        }
+        btn.addEventListener('click',handleClick)
+    });
+}
+
+// Вызываем сразу и после загрузки
+updateWhatsAppButtons();
+
 const animateOnScroll=()=>{
     document.querySelectorAll('.card,.testimonial,.hero-img').forEach(el=>{
         const top=el.getBoundingClientRect().top;
@@ -592,6 +604,7 @@ const animateOnScroll=()=>{
     })
 };
 window.addEventListener('load',()=>{
+    updateWhatsAppButtons(); // Обновляем еще раз после полной загрузки
     document.querySelectorAll('.card,.testimonial').forEach(c=>{
         c.style.opacity='0';
         c.style.transform='translateY(20px)';
@@ -610,7 +623,6 @@ window.addEventListener('scroll',animateOnScroll);
 })();
 let currentSlide=0;const totalSlides=10;
 const onlineWords=["клиент", "клиента", "клиента", "клиента"];
-const nameVariants=["{{NAME}}", "Мастер {{NAME}}", "Хранитель {{NAME}}", "Куратор {{NAME}}", "Защитница {{NAME}}"];
 const footerPrefix="Маг";
 const onlineIntro="Сейчас консультирую";
 function initSlider(){
@@ -644,8 +656,6 @@ function replaceNamePlaceholders(name){
     while(walker.nextNode()){targets.push(walker.currentNode)}
     targets.forEach(node=>{
         if(!node.nodeValue||node.nodeValue.indexOf('{{NAME}}')===-1)return;
-        const parent=node.parentElement||node.parentNode;
-        if(parent&&parent.closest('.testimonial'))return;
         node.nodeValue=node.nodeValue.replace(/{{NAME}}/g,name)
     })
 }
@@ -660,6 +670,10 @@ window.addEventListener('load',()=>{
     }
     const footerName=document.getElementById('footerName');
     if(footerName&&psychicName){footerName.textContent=`${footerPrefix} ${psychicName}`}
+    const heroDesc=document.getElementById('heroDescription');
+    if(heroDesc&&psychicName){heroDesc.textContent=`${psychicName} — профессиональный маг по снятию порчи и сглаза. Делаю сильные привороты на любовь, возвращаю любимых. Пишите в WhatsApp — отвечу быстро.`}
+    const footerDesc=document.getElementById('footerDescription');
+    if(footerDesc&&psychicName){footerDesc.textContent=`${psychicName} — практикующий маг. Снимаю порчу, сглаз, делаю привороты, возвращаю любимых. Консультации в WhatsApp.`}
     const legalEntity=document.getElementById('legalEntity');
     if(legalEntity&&psychicName){legalEntity.textContent=`ИП ${psychicName}`}
     const phoneNum=SITE_SETTINGS.phoneNumber;
@@ -693,13 +707,9 @@ setInterval(()=>{moveSlide(1)},8000);
 setTimeout(()=>{
     const name=SITE_SETTINGS.psychicName;
     if(name){
-        let idx=0;
         document.querySelectorAll('.testimonial p').forEach(p=>{
             const text=p.innerHTML;
-            p.innerHTML=text.replace(/{{NAME}}/g,()=>{
-                const template=nameVariants[idx++%nameVariants.length]||nameVariants[0];
-                return template.replace(/{{NAME}}/g,name)
-            })
+            p.innerHTML=text.replace(/{{NAME}}/g,name)
         })
     }
 },100);
@@ -723,4 +733,3 @@ ym(SITE_SETTINGS.yandexMetrikaId,"init",{clickmap:true,trackLinks:true,accurateT
 
 </body>
 </html>
-
