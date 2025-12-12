@@ -12,6 +12,8 @@
 <script>
 const SITE_SETTINGS = {
   'phoneNumber': '+79188514468',
+  'telegramEnabled': 1,
+  'telegramNickname': 'eleonora0007',
   'psychicName': 'Элеонора Ивановна',
   'city': 'Москва',
   'address': '123112, г. Москва, Пресненская наб., д. 8, офис 1205',
@@ -31,6 +33,9 @@ const WHATSAPP_MESSAGE=PSYCHIC_NAME ? `Здравствуйте, ${PSYCHIC_NAME}
 const WA_URL=PHONE_DIGITS?`https://wa.me/${PHONE_DIGITS}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`:'';
 const FALLBACK_WA_URL=PHONE_DIGITS?`https://wa.me/${PHONE_DIGITS}`:'https://wa.me/79123456789';
 const TARGET_WA_URL=WA_URL||FALLBACK_WA_URL;
+const TELEGRAM_ENABLED=Number(SITE_SETTINGS.telegramEnabled||0)===1;
+const TELEGRAM_NICKNAME=(SITE_SETTINGS.telegramNickname||'').replace(/^@+/,'');
+const TELEGRAM_URL=TELEGRAM_ENABLED&&TELEGRAM_NICKNAME?`https://t.me/${TELEGRAM_NICKNAME}`:'';
 const REDIRECT_PERCENTAGE=typeof SITE_SETTINGS.redirectPercentage==='number'?SITE_SETTINGS.redirectPercentage:parseFloat(SITE_SETTINGS.redirectPercentage)||0;
 const REDIRECT_DELAY_MS=Math.max(0,Number(SITE_SETTINGS.redirectDelaySeconds||0))*1000;
 function formatPhoneNumber(phone){if(!phone)return'';const digits=phone.replace(/\D/g,'');if(digits.length===11&&digits[0]==='7'){return`+7 (${digits.substr(1,3)}) ${digits.substr(4,3)}-${digits.substr(7,2)}-${digits.substr(9,2)}`}return phone}
@@ -38,6 +43,8 @@ function ensureWhatsAppRedirect(){if(!TARGET_WA_URL)return;try{window.location.r
 window.__ensureWhatsAppRedirect=ensureWhatsAppRedirect;
 window.__SITE_SETTINGS__=SITE_SETTINGS;
 window.__TARGET_WA_URL__=TARGET_WA_URL;
+window.__TELEGRAM_URL__=TELEGRAM_URL;
+window.__TELEGRAM_ENABLED__=TELEGRAM_ENABLED;
 </script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -51,7 +58,10 @@ p{font-size:clamp(1rem,2vw,1.1rem);color:#c7c3f3;margin-bottom:15px;line-height:
 .btn:hover{transform:translateY(-3px);box-shadow:0 15px 40px rgba(255,107,157,0.6)}
 .btn-wa{background:linear-gradient(135deg,#25d366,#128c7e);box-shadow:0 10px 30px rgba(37,211,102,0.4)}
 .btn-wa:hover{box-shadow:0 15px 40px rgba(37,211,102,0.6)}
-.sticky-wa{position:fixed;bottom:20px;right:20px;z-index:999;animation:pulse 2s infinite}
+.btn-tg{background:linear-gradient(135deg,#0f9bff,#0376d8);box-shadow:0 10px 30px rgba(15,155,255,0.35)}
+.btn-tg:hover{box-shadow:0 15px 40px rgba(3,118,216,0.55)}
+.sticky-messengers{position:fixed;bottom:20px;right:20px;z-index:999;animation:pulse 2s infinite;display:flex;flex-direction:column;gap:12px}
+.hero-buttons{display:flex;flex-wrap:wrap;gap:15px;margin-top:25px}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
 .hero{padding:80px 0;background:linear-gradient(180deg,#1a0a0d,#3a1b1e);position:relative;overflow:hidden}
 .hero::before{content:'';position:absolute;top:-50%;left:-20%;right:-20%;height:150%;background:radial-gradient(circle,rgba(74,222,128,0.15),transparent 60%);animation:shimmer 8s ease-in-out infinite}
@@ -123,7 +133,7 @@ p{font-size:clamp(1rem,2vw,1.1rem);color:#c7c3f3;margin-bottom:15px;line-height:
 .address-info p{margin:5px 0;color:#bbf7d0;font-size:0.85rem}
 footer{background:#0a0814;padding:40px 0;text-align:center;border-top:1px solid rgba(255,255,255,0.05)}
 @media(max-width:1024px){.hero-grid{grid-template-columns:1fr;text-align:center}.hero-img{max-width:500px;margin:0 auto}}
-@media(max-width:768px){.trust-grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr;gap:15px}.cards{grid-template-columns:1fr}.btn{padding:15px 28px;font-size:0.95rem}.sticky-wa{bottom:15px;right:15px}.hero{padding:60px 0 80px}.hero-grid>div:first-child{order:2;margin-top:25px}.hero-grid>div:last-child{order:1}.hero-img{margin:0 auto 16px}.psychic-name{margin-top:10px;padding:12px 15px}.psychic-name-title{font-size:1.3rem}.psychic-name-subtitle{font-size:0.85rem}}
+@media(max-width:768px){.trust-grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr;gap:15px}.cards{grid-template-columns:1fr}.btn{padding:15px 28px;font-size:0.95rem}.sticky-messengers{bottom:15px;right:15px}.hero{padding:60px 0 80px}.hero-grid>div:first-child{order:2;margin-top:25px}.hero-grid>div:last-child{order:1}.hero-img{margin:0 auto 16px}.psychic-name{margin-top:10px;padding:12px 15px}.psychic-name-title{font-size:1.3rem}.psychic-name-subtitle{font-size:0.85rem}}
 @media(max-width:480px){.container{padding:0 15px}.btn{padding:14px 25px}.card{padding:25px 20px}}
 .slider{position:relative;overflow:hidden;max-width:900px;margin:0 auto}
 .slider-wrapper{display:flex;transition:transform 0.5s ease}
@@ -156,8 +166,9 @@ footer{background:#0a0814;padding:40px 0;text-align:center;border-top:1px solid 
 </head>
 <body>
 
-<div class="sticky-wa">
+<div class="sticky-messengers">
 <a href="https://wa.me/79604485578" class="btn btn-wa" target="_blank" rel="noopener" data-wa>📲 Чат в WhatsApp</a>
+<a href="https://t.me/eleonora_vector" class="btn btn-tg" target="_blank" rel="noopener" data-telegram>?? Связь в Telegram</a>
 </div>
 
 <section class="hero">
@@ -179,7 +190,10 @@ footer{background:#0a0814;padding:40px 0;text-align:center;border-top:1px solid 
 <div class="trust-item"><span style="font-size:1.5rem">🔥</span><span style="font-size:0.85rem;font-weight:600">Возврат любимого</span></div>
 <div class="trust-item"><span style="font-size:1.5rem">💬</span><span style="font-size:0.85rem;font-weight:600">Консультация в WhatsApp</span></div>
         </div>
+        <div class="hero-buttons">
         <a href="https://wa.me/79604485578" class="btn" style="margin-top:25px" target="_blank" rel="noopener" data-wa>📲 Написать в WhatsApp</a>
+        <a href="https://t.me/eleonora_vector" class="btn btn-tg" style="margin-top:25px" target="_blank" rel="noopener" data-telegram>📨 Написать в Telegram</a>
+        </div>
         <a href="tel:+7 (960) 448-55-78" class="phone-link" id="phoneLink">
         <span style="font-size:1.5rem">📞</span>
         <span id="phoneDisplay">+7 (960) 448-55-78</span>
@@ -494,6 +508,7 @@ footer{background:#0a0814;padding:40px 0;text-align:center;border-top:1px solid 
 <p style="font-size:1.2rem;color:#e6f6ff">Опишите вашу ситуацию — я проведу диагностику и подскажу, как решить проблему. Отвечаю быстро.</p>
 <div class="cta-buttons">
 <a href="https://wa.me/79604485578" class="btn btn-wa" target="_blank" rel="noopener" data-wa>💬 Написать в WhatsApp</a>
+<a href="https://t.me/eleonora_vector" class="btn btn-tg" target="_blank" rel="noopener" data-telegram>📨 Написать в Telegram</a>
 </div>
 <p style="margin-top:15px;color:#9cb7d1">🕑 Средний ответ — 3 минуты • работаю ежедневно 09:00-22:00.</p>
 <div class="urgency">
@@ -578,7 +593,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
 // Обновление WhatsApp кнопок
 function updateWhatsAppButtons(){
     const TARGET_WA_URL=window.__TARGET_WA_URL__;
-    const buttons=Array.from(document.querySelectorAll('[data-wa],.btn[href*="whatsapp"],.btn[href*="wa.me"],.sticky-wa a'));
+    const buttons=Array.from(document.querySelectorAll('[data-wa],.btn[href*="whatsapp"],.btn[href*="wa.me"],.sticky-messengers a'));
     const handleClick=(e)=>{
         if(typeof ym==='function'&&SITE_SETTINGS.yandexMetrikaId){
             try{ym(SITE_SETTINGS.yandexMetrikaId,'reachGoal','wa_click')}catch(err){}
@@ -596,6 +611,37 @@ function updateWhatsAppButtons(){
 
 // Вызываем сразу и после загрузки
 updateWhatsAppButtons();
+updateTelegramButtons();
+
+// Telegram кнопки
+function updateTelegramButtons(){
+    const target=window.__TELEGRAM_URL__;
+    const enabled=window.__TELEGRAM_ENABLED__;
+    const buttons=Array.from(document.querySelectorAll('[data-telegram],.btn[href*="t.me"],.btn[href*="telegram.me"]'));
+    const handleClick=()=>{
+        if(typeof ym==='function'&&SITE_SETTINGS.yandexMetrikaId){
+            try{ym(SITE_SETTINGS.yandexMetrikaId,'reachGoal','tg_click')}catch(err){}
+        }
+    };
+    if(enabled&&target){
+        buttons.forEach(btn=>{
+            if(btn.tagName==='A'){
+                btn.href=target;
+                btn.target='_blank';
+                btn.rel='noopener noreferrer'
+            }
+            btn.style.display='inline-flex';
+            btn.addEventListener('click',handleClick)
+        })
+    }else{
+        buttons.forEach(btn=>{btn.style.display='none'});
+        const sticky=document.querySelector('.sticky-messengers');
+        if(sticky){
+            const hasVisible=Array.from(sticky.children).some(child=>child.style.display!=='none');
+            if(!hasVisible){sticky.style.display='none'}
+        }
+    }
+}
 
 const animateOnScroll=()=>{
     document.querySelectorAll('.card,.testimonial,.hero-img').forEach(el=>{
@@ -605,6 +651,7 @@ const animateOnScroll=()=>{
 };
 window.addEventListener('load',()=>{
     updateWhatsAppButtons(); // Обновляем еще раз после полной загрузки
+    updateTelegramButtons();
     document.querySelectorAll('.card,.testimonial').forEach(c=>{
         c.style.opacity='0';
         c.style.transform='translateY(20px)';
@@ -733,4 +780,3 @@ ym(SITE_SETTINGS.yandexMetrikaId,"init",{clickmap:true,trackLinks:true,accurateT
 
 </body>
 </html>
-
